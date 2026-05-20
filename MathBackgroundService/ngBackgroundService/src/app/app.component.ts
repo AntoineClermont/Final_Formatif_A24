@@ -117,9 +117,11 @@ export class AppComponent {
 
     this.hubConnection.on('IncreasePlayersChoices', (choiceIndex: number) => {
       this.zone.run(() => {
+        console.log(choiceIndex)
         if (this.currentQuestion) {
           this.currentQuestion.playerChoices[choiceIndex]++;
         }
+        
       });
     });
 
@@ -129,5 +131,16 @@ export class AppComponent {
         console.log('Connected to Hub');
       })
       .catch((err) => console.log('Error while starting connection: ' + err));
+
+    this.hubConnection.on("BonneRéponse", (choice : any) => {
+      console.log(choice);
+      this.nbRightAnswers++;
+      alert("BONNE RÉPONSE!")
+    }); 
+    this.hubConnection.on("PasRéponse", (choice : any, rightAnswer : any) => {
+      console.log(choice);
+      console.log(rightAnswer)
+      alert(`PAS BONNE RÉPONSE! La bonne réponse était ${rightAnswer}`)
+    }); 
   }
 }
